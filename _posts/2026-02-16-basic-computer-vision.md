@@ -1,5 +1,5 @@
 ---
-title: "Práctica 1: Visión Artificial Básica"
+title: "Práctica 1: Visión artificial básica"
 date: 2026-02-16
 categories: [Unibotics, Robótica]
 ---
