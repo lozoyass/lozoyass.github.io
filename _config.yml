@@ -1,54 +1,22 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-
 # Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
 title: "Diario de robótica de Jorge Lozoya Astudillo"
-email:
-description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-twitter_username: username
-github_username: username
+description: "Bitácora de prácticas de robótica en Unibotics."
 minimal_mistakes_skin: default
-search: true
+search: false # Desactivado para limpiar la barra superior
 
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
+
 # Outputting
 permalink: /:categories/:title/
-paginate: 5 # amount of posts to show
+paginate: 5
 paginate_path: /page:num/
-timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
   - _pages
 
-# Exclude from processing.
-# The following items will not be processed, by default. Create a custom list
-# to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
-
-# Plugins (previously gems:)
+# Plugins
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
@@ -57,35 +25,16 @@ plugins:
   - jemoji
   - jekyll-include-cache
 
+# Configuración del Autor (Sidebar)
 author:
   name   : "Jorge Lozoya"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : "My awesome biography constrained to a sentence or two goes here."
-  links:
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
-      url: "https://"
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+  bio    : "Ingeniero informático. Estudiante de visión artificial. Aquí publicaré mis avances en las prácticas de Unibotics."
+  links: [] # Esto elimina los iconos de redes sociales bajo la foto
 
+# Configuración del Footer
 footer:
-  links:
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
-    - label: "GitHub"
-      icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+  links: [] # Esto limpia todos los enlaces del pie de página
 
 defaults:
   # _posts
@@ -94,11 +43,11 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
-      read_time: true
-      comments: true
-      share: true
-      related: true
+      author_profile: true # Mantiene la foto y bio a la izquierda
+      read_time: false    # Quita el "1 min read"
+      comments: false     # Desactiva comentarios
+      share: false        # Quita botones de Facebook/Twitter al final del post
+      related: false      # Quita la sección de "Posts relacionados" que sale al final
   # _pages
   - scope:
       path: "_pages"
@@ -107,6 +56,7 @@ defaults:
       layout: single
       author_profile: true
 
+# Archivos de categorías y etiquetas (limpio)
 category_archive:
   type: liquid
   path: /categories/
