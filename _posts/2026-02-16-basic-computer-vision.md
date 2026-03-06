@@ -1,6 +1,6 @@
 ---
-title: "Práctica 1: Visión artificial básica"
-date: 2026-02-16
+title: "Práctica 1: Follow-line"
+date: 2026-03-10
 categories: [Unibotics, Robótica]
 ---
 # Introducción
