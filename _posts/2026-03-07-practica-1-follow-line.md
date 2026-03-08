@@ -6,7 +6,23 @@ classes: wide
 date: 2026-03-07
 categories: vision-robotica
 author_profile: false
+sidebar:
+  nav: ""
 ---
+
+<style>
+  .page__content {
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    float: none !important;
+  }
+  .page__inner-wrap {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+  }
+</style>
 
 ## 1. Introducción
 
@@ -238,3 +254,16 @@ Finalmente, me gustaría dedicar unas palabras al entorno de trabajo. Soy consci
 Quiero agradecer especialmente el trabajo del equipo desarrollador del entorno: [Carlos del Águila](https://github.com/CDAM2020) y [Javier Izquierdo](https://github.com/javizqh). Su labor, permitiéndonos experimentar en esta sandobx virtual, ha sido esencial para que podamos aplicar la teoría a la práctica.
 
 Me gustaría recalcar, además, la predisposición de mi compañero Javier para resolver de forma individualizada cualquier duda sobre la instalación, descarga y ejecución del entorno. Su compromiso con nostros, atendiendo cada incidencia técnica con una actitud profesional, ha sido clave para que muchos de nosotros pudiéramos centrarnos en lo que realmente importa: la programación del robot.
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true
+    }
+  });
+</script>
