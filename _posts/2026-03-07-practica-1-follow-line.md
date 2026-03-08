@@ -1,8 +1,9 @@
 ---
-layout: post
+layout: single
 title: "Práctica 1: Follow Line"
 date: 2026-03-07
 categories: vision-robotica
+author_profile: true
 ---
 
 ## 1. Introducción
