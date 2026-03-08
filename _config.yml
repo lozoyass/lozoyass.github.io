@@ -2,64 +2,28 @@
 title: "Diario de robótica de Jorge Lozoya Astudillo"
 description: "Bitácora de prácticas de robótica en Unibotics."
 url: "https://lozoyass.github.io" 
-baseurl: ""                      
+baseurl: ""
+
+# Configuración del Tema
+# Importante: Algunos entornos de GitHub necesitan 'theme' y otros 'remote_theme'. Ponemos ambos para asegurar.
+theme: jekyll-remote-theme
+remote_theme: mmistakes/minimal-mistakes
+minimal_mistakes_skin: "default" # Puedes probar "air", "aqua" o "contrast" si quieres cambiar colores
 
 # Build settings
 markdown: kramdown
-remote_theme: mmistakes/minimal-mistakes
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
 
-# Outputting
-permalink: /:categories/:title/
-paginate: 5
-paginate_path: /page:num/
-
-include:
-  - _pages
-
-# Plugins
+# Plugins (Asegúrate de tener estos dos primeros siempre)
 plugins:
+  - jekyll-remote-theme
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
-
-# Configuración del Autor (Sidebar)
-author:
-  name   : "Jorge Lozoya"
-  avatar : "/assets/images/bio-photo.jpg"
-  bio    : "Ingeniero informático. Estudiante de visión artificial. Aquí publicaré mis avances en las prácticas de Unibotics."
-  links: [] # Esto elimina los iconos de redes sociales bajo la foto
-
-# Configuración del Footer
-footer:
-  links: [] # Esto limpia todos los enlaces del pie de página
-
-defaults:
-  # _posts
-  - scope:
-      path: ""
-      type: posts
-    values:
-      layout: single
-      author_profile: true # Mantiene la foto y bio a la izquierda
-      read_time: false    # Quita el "1 min read"
-      comments: false     # Desactiva comentarios
-      share: false        # Quita botones de Facebook/Twitter al final del post
-      related: false      # Quita la sección de "Posts relacionados" que sale al final
-  # _pages
-  - scope:
-      path: "_pages"
-      type: pages
-    values:
-      layout: single
-      author_profile: true
-
-# Archivos de categorías y etiquetas (limpio)
-category_archive:
-  type: liquid
-  path: /categories/
-tag_archive:
-  type: liquid
-  path: /tags/
