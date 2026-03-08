@@ -5,7 +5,7 @@ mathjax: true
 classes: wide
 date: 2026-03-07
 categories: vision-robotica
-author_profile: false
+author_profile: true
 sidebar:
   nav: ""
 ---
@@ -232,7 +232,10 @@ La mayor vulnerabilidad del enfoque *topmost* reside en los trazados que se plie
 
 Como el algoritmo busca incansablemente el píxel rojo con la coordenada "Y" más pequeña (el más lejano en el horizonte), en una chicane plana el coche detectaría directamente la **recta de salida al fondo**, ignorando por completo las curvas intermedias y trazando una línea recta, recortando la curva y saliéndose inevitablemente de la pista al no respetar el trazado inmediato.
 
-![Trayectoria chicane](/assets/images/Chicane.jpeg)
+<figure align="center">
+  <img src="{{ site.baseurl }}/assets/images/Chicane.jpeg" alt="Trayectoria en chicane" style="border-radius: 8px; max-width: 90%; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  <figcaption>Esquema de la trayectoria (flecha negra) que seguiría el coche en una chicane cerrada.</figcaption>
+</figure>
 
 ### b. ROI estática
 Actualmente, el horizonte de visión del coche está delimitado por un recorte rígido en la imagen (`inicio_y_ROI = 250`). Aunque este ajuste funciona perfectamente en los circuitos planos del simulador, esta rigidez supondría un problema en entornos tridimensionales con **rasantes, cuestas o peraltes**. 
@@ -254,6 +257,22 @@ Finalmente, me gustaría dedicar unas palabras al entorno de trabajo. Soy consci
 Quiero agradecer especialmente el trabajo del equipo desarrollador del entorno: [Carlos del Águila](https://github.com/CDAM2020) y [Javier Izquierdo](https://github.com/javizqh). Su labor, permitiéndonos experimentar en esta sandobx virtual, ha sido esencial para que podamos aplicar la teoría a la práctica.
 
 Me gustaría recalcar, además, la predisposición de mi compañero Javier para resolver de forma individualizada cualquier duda sobre la instalación, descarga y ejecución del entorno. Su compromiso con nostros, atendiendo cada incidencia técnica con una actitud profesional, ha sido clave para que muchos de nosotros pudiéramos centrarnos en lo que realmente importa: la programación del robot.
+
+## 9. Referencias y enlaces de interés
+
+En esta sección se detallan las herramientas y fuentes de consulta que han sido fundamentales para el desarrollo de la práctica:
+
+* **Herramientas de visión:**
+    * [Selector de color online (ImageColorPicker)](https://imagecolorpicker.online/es/): Utilizado para la identificación precisa de los rangos HSV de la línea roja.
+* **Documentación y referentes:**
+    * [Blog de Sandra Montejano Cánovas](URL_DEL_BLOG_DE_SANDRA): Referencia para la comparación de arquitecturas de control y lógica de filtrado.
+* **Colaboradores y desarrolladores:**
+    * [Javier Izquierdo Hernández (GitHub)](https://github.com/USUARIO_DE_JAVIER): Integrante del equipo de desarrollo de Unibotics y soporte técnico del entorno.
+    * [Carlos del Águila (GitHub)](https://github.com/CDAM2020): Integrante del equipo de desarrollo de Unibotics y soporte técnico del entorno.
+* **Entorno de prácticas:**
+    * [Repositorio Oficial de Unibotics](https://github.com/JdeRobot/RoboticsAcademy): Infraestructura sobre la que se ha ejecutado el simulador y el framework de control.
+
+---
 
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
