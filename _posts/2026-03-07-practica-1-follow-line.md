@@ -2,9 +2,10 @@
 layout: single
 title: "Práctica 1: Follow Line"
 mathjax: true
+classes: wide
 date: 2026-03-07
 categories: vision-robotica
-author_profile: true
+author_profile: false
 ---
 
 ## 1. Introducción
@@ -155,18 +156,16 @@ Con una $V_{max}$ alta, el coche traza el circuito al límite del agarre. El alg
 #### b. Configuración conservadora (Tiempo: ~1 minuto)
 Reduciendo la $V_{max}$, el coche demuestra que el control es estable independientemente de la velocidad punta configurada.
 
-<div align="center">
-  <iframe 
-    width="100%" 
-    height="400" 
-    src="https://www.youtube.com/embed/MuQpxBm7BKo" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-  </iframe>
-  <br>
-  <em>Vídeo demostrativo del vehículo completando el circuito simple en 1 min.</em>
+<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <iframe 
+      src="https://www.youtube.com/embed/MuQpxBm7BKo" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+  </div>
+  <p align="center"><small><em>Vídeo demostrativo del vehículo completando el circuito simple en 1 min.</em></small></p>
 </div>
 
 ### Validación de robustez: Montmeló y Nürburgring
@@ -176,36 +175,32 @@ Para avalar la robustez de la solución , se probó el código en los circuitos 
 
 En el caso de Montmeló, el algoritmo demostró su adaptabilidad completando sin problemas y de forma muy fluida aproximadamente el **75% del trazado**. Sin embargo, en el último sector de este circuito y durante las pruebas en Nürburgring, me topo con limitaciones técnicas propias del entorno de simulación. Al alcanzar ciertas zonas del mapa, el motor de físicas del simulador experimenta anomalías en el cálculo de colisiones, provocando que el vehículo salga despedido por los aires y abandone el mapa de forma errática. Muestro el recorrido de mi coche en el fragmento inicial del circuito.
 
-<div align="center">
-  <iframe 
-    width="100%" 
-    height="400" 
-    src="https://www.youtube.com/embed/9HV75X7DLs0" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-  </iframe>
-  <br>
-  <em>Vídeo demostrativo del comportamiento del vehículo en el circuito de Montmeló.</em>
+<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <iframe 
+      src="https://www.youtube.com/embed/9HV75X7DLs0" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+  </div>
+  <p align="center"><small><em>Vídeo demostrativo del comportamiento del vehículo en el circuito de Montmeló.</em></small></p>
 </div>
 
 #### Nürburgring
 
 Muestro ahora el fallo persistente en el circuito de Nürburgring, el cual me impide siquiera avanzar unos metros:
 
-<div align="center">
-  <iframe 
-    width="100%" 
-    height="400" 
-    src="https://www.youtube.com/embed/gauoVx4d1RQ" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-  </iframe>
-  <br>
-  <em>Vídeo demostrativo del error de físicas en el circuito de Nürburgring.</em>
+<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <iframe 
+      src="https://www.youtube.com/embed/gauoVx4d1RQ" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+  </div>
+  <p align="center"><small><em>Vídeo demostrativo del error de físicas en el circuito de Nürburgring.</em></small></p>
 </div>
 
 Monitorizando la telemetría interna, se comprobó que los cálculos del error, la velocidad lineal ($V$) e angular ($W$) generados por mi controlador eran **numéricamente correctos** y coherentes con la trazada en el momento del fallo. Por tanto, se concluye que el rendimiento final queda limitado exclusivamente por la estabilidad física del simulador.
