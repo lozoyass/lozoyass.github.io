@@ -267,7 +267,7 @@ En esta sección se detallan las herramientas y fuentes de consulta que han sido
 * **Documentación y referentes:**
     * [Blog de Sandra Montejano Cánovas](https://sanmcr.github.io/follow-line-fuera/): Referencia para la comparación de arquitecturas de control y lógica de filtrado.
 * **Colaboradores y desarrolladores:**
-    * [Javier Izquierdo Hernández (GitHub)](hhttps://github.com/javizqh): Integrante del equipo de desarrollo de Unibotics y soporte técnico del entorno.
+    * [Javier Izquierdo Hernández (GitHub)](https://github.com/javizqh): Integrante del equipo de desarrollo de Unibotics y soporte técnico del entorno.
     * [Carlos del Águila (GitHub)](https://github.com/CDAM2020): Integrante del equipo de desarrollo de Unibotics y soporte técnico del entorno.
 * **Entorno de prácticas:**
     * [Repositorio Oficial de Unibotics](https://github.com/JdeRobot/RoboticsAcademy): Infraestructura sobre la que se ha ejecutado el simulador y el framework de control.
