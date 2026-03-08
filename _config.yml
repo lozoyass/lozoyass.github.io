@@ -1,8 +1,8 @@
 # Site settings
 title: "Diario de robótica de Jorge Lozoya Astudillo"
 description: "Bitácora de prácticas de robótica en Unibotics."
-minimal_mistakes_skin: default
-search: false # Desactivado para limpiar la barra superior
+url: "https://lozoyass.github.io" 
+baseurl: ""                      
 
 # Build settings
 markdown: kramdown
