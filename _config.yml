@@ -65,3 +65,6 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
+
+# Fórmulas LaTeX
+mathjax: true

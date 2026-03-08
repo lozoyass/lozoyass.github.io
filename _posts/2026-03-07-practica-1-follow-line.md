@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Práctica 1: Follow Line"
+mathjax: true
 date: 2026-03-07
 categories: vision-robotica
 author_profile: true
@@ -139,18 +140,16 @@ El comportamiento en el circuito base ha sido excepcional, demostrando la eficac
 #### a. Configuración agresiva (Tiempo: ~25 segundos)
 Con una $V_{max}$ alta, el coche traza el circuito al límite del agarre. El algoritmo anticipa perfectamente las curvas, frenando lo justo y necesario.
 
-<div align="center">
-  <iframe 
-    width="100%" 
-    height="400" 
-    src="https://www.youtube.com/embed/T0ddJ6jPpbQ" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen>
-  </iframe>
-  <br>
-  <em>Vídeo demostrativo del vehículo completando el circuito simple en 26s.</em>
+<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <iframe 
+      src="https://www.youtube.com/embed/T0ddJ6jPpbQ" 
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+  </div>
+  <p align="center"><small><em>Vídeo demostrativo del vehículo completando el circuito simple en 26s.</em></small></p>
 </div>
 
 #### b. Configuración conservadora (Tiempo: ~1 minuto)
