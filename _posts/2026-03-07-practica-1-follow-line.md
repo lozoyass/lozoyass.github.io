@@ -242,6 +242,11 @@ Actualmente, el horizonte de visión del coche está delimitado por un recorte r
 
 Si el coche se enfrenta a una pendiente pronunciada, el morro se levanta y la línea roja podría quedar por debajo del límite inferior de nuestro ROI estático, provocando un "falso vacío de decisión" a pesar de que la línea sigue estando presente en la imagen original de la cámara.
 
+### c. Comportamiento de búsqueda por tiempo limitado
+En el estado actual del código, cuando el algoritmo pierde la referencia visual (vacío de decisión), el vehículo entra en un bucle de búsqueda girando sobre su propio eje basándose en el `error_anterior`. Si bien esto permite recuperar la trazada en pérdidas puntuales, el coche mantendría este giro indefinidamente si la línea desaparece por completo.
+
+Una optimización futura necesaria sería la implementación de un **temporizador de seguridad**. Si tras un intervalo de tiempo $X$ (por ejemplo, 2 segundos) el sensor de visión no vuelve a detectar píxeles rojos, el controlador debería reducir la velocidad lineal a cero de forma progresiva. Esto evitaría comportamientos erráticos o que el vehículo se aleje excesivamente de la pista en caso de un fallo crítico de segmentación o un cambio drástico en las condiciones del entorno.
+
 ## 8. Conclusiones y opinión personal
 
 Esta práctica ha supuesto mi primer contacto real con la robótica de control y la visión artificial aplicada. Aunque anteriormente había trabajado en proyectos con microcontroladores como Arduino, la complejidad de gestionar un sistema dinámico en tiempo real a 50 Hz ha sido un desafío de una escala completamente diferente.
