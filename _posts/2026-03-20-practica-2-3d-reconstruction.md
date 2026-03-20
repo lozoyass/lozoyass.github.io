@@ -40,7 +40,14 @@ In this case the epipolar line for both the image planes are same, and are paral
 
 Trabajar en un simulador perfecto nos permite asumir esta geometría ideal, lo que simplificará enormemente los cálculos epipolares más adelante.
 
-![Configuración estéreo canónica](/assets/images/estereo_canonico_cropped.jpg)
+<div style="text-align: center; margin: 2em 0;">
+  <figure style="display: inline-block; margin: 0; padding: 0;">
+    <img src="/assets/images/estereo_canonico_cropped.jpg" alt="Configuración estéreo canónica" style="width: 60%; max-width: 600px; height: auto;">
+    <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
+      Geometría del par estéreo canónico. Imagen adaptada de la documentación oficial.
+    </figcaption>
+  </figure>
+</div>
 
 Además de la geometría general, el algoritmo necesita las medidas exactas del modelo de la cámara. Realizamos una pequeña depuración imprimiendo por terminal los datos del driver de ROS (``` HAL.getCameraPosition() ```). A partir de las matrices intrínseca ($K$) y extrínseca ($RT$) devueltas por la terminal, extrajimos nuestras constantes fundamentales:
 
@@ -61,9 +68,7 @@ Una vez extraídos los píxeles de interés en la cámara izquierda, necesitamos
 
 * **La ventaja canónica:** En un sistema estéreo cualquiera, para buscar el punto homólogo deberíamos proyectar un rayo 3D para hallar una línea epipolar en la segunda cámara. Sin embargo, como establece la documentación: 
 
-```
-"Stereo reconstruction is a special case... the epipolar line for both the image planes are same, and are parallel to the width of the planes". 
-```
+> "Stereo reconstruction is a special case... the epipolar line for both the image planes are same, and are parallel to the width of the planes".
 
 Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente horizontal. Por lo tanto, nos ahorramos todos los cálculos de backprojection: si nuestro píxel está en la fila $Y$ de la imagen izquierda, su gemelo estará exactamente en la misma fila $Y$ de la imagen derecha.
 
