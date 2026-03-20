@@ -127,6 +127,9 @@ Se muestra un vídeo del escenario renderizado.
 
 ## 7. Conclusiones
 
+Al principio, la teoría de la visión estéreo me resultaba abstracta y difícil de asimilar. Sin embargo, el punto de inflexión fue la programación: ver cómo la focal y la disparidad daban forma al entorno del robot me hizo comprenderlo mejor. La implementación práctica fue el puente necesario para comprender cómo funciona realmente la reconstrucción 3D. Para sorpresa de nadie, la práctica hace al maestro (aunque no me considero maestro ni de lejos en este ámbito).
+
+La visión estéreo no era el tema que más me entusiasmaba, pero mi perspectiva ha cambiado radicalmente. Esto debo atribuirlo también a las clases complementarias de la asignatura de visión tridimensional, en las cuales hemos profundizado mucho más y me han permitido tener un entendimiento mayor del tema. Me parece un mundo apasionante.
 
 ---
 
