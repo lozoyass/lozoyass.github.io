@@ -32,11 +32,7 @@ Para llevar a cabo este desarrollo, volvemos a utilizar el entorno de simulació
 ## 2. Fundamentos del estéreo canónico
 Para poder reconstruir el mundo en 3D, primero necesitamos entender cómo están configurados los "ojos" de nuestro robot. En nuestro caso, trabajamos con un par estéreo canónico. Esto significa que las dos cámaras están perfectamente coplanarias (en el mismo plano) y sus ejes ópticos son estrictamente paralelos. ¿Cómo sabemos que esto es así y no hay distorsiones físicas? Porque nos apoyamos en la propia documentación teórica de la práctica, que establece esta configuración por diseño: 
 
-```
-"Stereo reconstruction is a special case of the above 3d reconstruction where the two image planes are parallel to each other and equally distant from the 3d point we want to plot.
-
-In this case the epipolar line for both the image planes are same, and are parallel to the width of the planes, simplifying our constraints better."
-```
+> "Stereo reconstruction is a special case of the above 3d reconstruction where the two image planes are parallel to each other and equally distant from the 3d point we want to plot. In this case the epipolar line for both the image planes are same, and are parallel to the width of the planes, simplifying our constraints better."
 
 Trabajar en un simulador perfecto nos permite asumir esta geometría ideal, lo que simplificará enormemente los cálculos epipolares más adelante.
 
@@ -44,14 +40,21 @@ Trabajar en un simulador perfecto nos permite asumir esta geometría ideal, lo q
   <figure style="display: inline-block; margin: 0; padding: 0;">
     <img src="/assets/images/estereo_canonico_cropped.jpg" alt="Configuración estéreo canónica" style="width: 60%; max-width: 600px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
-      Geometría del par estéreo canónico. Imagen adaptada de la documentación oficial.
+      Figura 1. Representación del par estéreo canónico.
     </figcaption>
   </figure>
 </div>
 
 Además de la geometría general, el algoritmo necesita las medidas exactas del modelo de la cámara. Realizamos una pequeña depuración imprimiendo por terminal los datos del driver de ROS (``` HAL.getCameraPosition() ```). A partir de las matrices intrínseca ($K$) y extrínseca ($RT$) devueltas por la terminal, extrajimos nuestras constantes fundamentales:
 
-![Parámetros intrínsecos del par estéreo](/assets/images/parametros_terminal.png)
+<div style="text-align: center; margin: 2em 0;">
+  <figure style="display: inline-block; margin: 0; padding: 0;">
+    <img src="/assets/images/parametros_terminal.png" alt="Parámetros mostrados por la terminal" style="width: 60%; max-width: 800px; height: auto;">
+    <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
+      Figura 2. Constantes fundamentales mostradas por terminal.
+    </figcaption>
+  </figure>
+</div>
 
 * **Focal ($f$):** $240.0$ píxeles
 * **Centro óptico ($c\_x, c\_y$):** $(320.0, 240.0)$, justo en el centro de nuestras imágenes de $640\times480$
@@ -72,7 +75,14 @@ Una vez extraídos los píxeles de interés en la cámara izquierda, necesitamos
 
 Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente horizontal. Por lo tanto, nos ahorramos todos los cálculos de backprojection: si nuestro píxel está en la fila $Y$ de la imagen izquierda, su gemelo estará exactamente en la misma fila $Y$ de la imagen derecha.
 
-![Líneas epipolares dibujadas](/assets/images/lineas_epipolares.png)
+<div style="text-align: center; margin: 2em 0;">
+  <figure style="display: inline-block; margin: 0; padding: 0;">
+    <img src="/assets/images/lineas_epipolares.png" alt="Líneas epipolares dibujadas" style="width: 60%; max-width: 600px; height: auto;">
+    <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
+      Figura 3. Líneas epipolares dibujadas.
+    </figcaption>
+  </figure>
+</div>
 
 * **Acotando la búsqueda (rango en $X$):** Ya sabemos que la búsqueda es unidimensional (solo nos movemos en el eje $X$), pero no hace falta recorrer toda la fila. Geométricamente, un objeto visto desde la cámara derecha siempre aparecerá desplazado hacia la izquierda en comparación con la cámara izquierda. Así, nuestro límite máximo de búsqueda (rango_max) es la posición X original del píxel. El límite mínimo (rango_min) lo definimos como el radio_parche de nuestra ventana de comparación, puramente para evitar salirnos de los límites de la matriz de la imagen.
 * **Template matching:** Usamos una ventana de $15\times15$ píxeles de la imagen izquierda para buscar su homólogo en la derecha mediante ``` cv2.matchTemplate ```. Solo aceptamos emparejamientos con una similitud superior al $70$%.
@@ -94,7 +104,14 @@ $$
 
 * **Limpieza de puntos espúreos:** A pesar del umbral de similitud, el template matching puede generar falsos positivos. Estos errores producen disparidades absurdas. Para limpiar la nube de puntos, aplicamos un "clipping": descartamos cualquier punto que matemáticamente quede a más de 20 metros ($Z > 20000 \text{ mm}$) o a menos de 2 metros ($Z < 2000 \text{ mm}$). Esto elimina algo del ruido, pero no todo.
 
-![Puntos espúreos (malos emparejamientos)](/assets/images/espureos_pintados.png)
+<div style="text-align: center; margin: 2em 0;">
+  <figure style="display: inline-block; margin: 0; padding: 0;">
+    <img src="/assets/images/espureos_pintados.png" alt="Puntos espúreos (malos emparejamientos)" style="width: 60%; max-width: 600px; height: auto;">
+    <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
+      Figura 4. Puntos espúreos (emparejamientos erróneos).
+    </figcaption>
+  </figure>
+</div>
 
 ## 6. Proyección final
 * **Ajuste de coordenadas:** El sistema de coordenadas de una imagen plana sitúa el origen $(0,0)$ arriba a la izquierda (la Y crece hacia abajo). En un entorno 3D, el eje Y suele crecer hacia el cielo. Para evitar renderizar la escena boca abajo y en espejo, invertimos los signos al empaquetar el punto visual ($-X$, $-Y$).
