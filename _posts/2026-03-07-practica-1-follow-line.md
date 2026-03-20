@@ -42,7 +42,7 @@ Por ello, mi prioridad absoluta fue conseguir una trazada fluida. Mi desesperaci
 
 Como detallaré a lo largo de este blog, este cambio de estrategia no solo erradicó el cabeceo en las curvas, sino que me proporcionó un chasis digital tan estable que me permitió ser mucho más agresivo con las velocidades, logrando bajar mi marca personal hasta los **25 segundos** en el circuito simple.
 
-## 2. Teoría y Fundamentos de Control
+## 2. Teoría y fundamentos de control
 
 El seguimiento de la línea se basa en un **enfoque reactivo en bucle cerrado**. A diferencia de un sistema deliberativo (que sigue un plan rígido sin mirar el entorno), un sistema reactivo utiliza la información de la cámara para calcular constantemente la diferencia entre la posición actual y el estado ideal (centro de la imagen). 
 
@@ -76,8 +76,8 @@ Debido a que el color rojo se encuentra en los extremos del espectro circular de
 ![Cilindro de color HSV](/assets/images/Cilindro_hsv.jpg)
 
 En la implementación con OpenCV, debemos ajustar estas escalas debido a la codificación de 8 bits (0-255): 
-* El valor del **Matiz (H)** se divide por 2 para encajar en el rango 0-179.
-* La **Saturación (S)** y el **Brillo (V)** se escalan multiplicando por 2.55 para cubrir el rango 0-255.
+* El valor del **matiz (H)** se divide por 2 para encajar en el rango 0-179.
+* La **saturación (S)** y el **brillo (V)** se escalan multiplicando por 2.55 para cubrir el rango 0-255.
 
 Finalmente, aplicamos estas máscaras para generar una **imagen binaria** donde los píxeles rojos se muestran en blanco y el resto en negro, facilitando así la extracción de las coordenadas de la línea.
 
