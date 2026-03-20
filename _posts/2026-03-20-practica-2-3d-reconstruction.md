@@ -106,7 +106,7 @@ $$
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
-    <img src="/assets/images/espureos_pintados.png" alt="Puntos espúreos (malos emparejamientos)" style="width: 80%; max-width: 800px; height: auto;">
+    <img src="/assets/images/espureos_pintados.png" alt="Puntos espúreos (malos emparejamientos)" style="width: 80%; max-width: 1400px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
       Figura 4. Puntos espúreos (emparejamientos erróneos).
     </figcaption>
