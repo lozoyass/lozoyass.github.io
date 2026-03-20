@@ -49,7 +49,7 @@ Además de la geometría general, el algoritmo necesita las medidas exactas del 
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
-    <img src="/assets/images/parametros_terminal.png" alt="Parámetros mostrados por la terminal" style="width: 60%; max-width: 800px; height: auto;">
+    <img src="/assets/images/parametros_terminal.png" alt="Parámetros mostrados por la terminal" style="width: 100%; max-width: 1400px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
       Figura 2. Constantes fundamentales mostradas por terminal.
     </figcaption>
@@ -77,7 +77,7 @@ Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
-    <img src="/assets/images/lineas_epipolares.png" alt="Líneas epipolares dibujadas" style="width: 60%; max-width: 600px; height: auto;">
+    <img src="/assets/images/lineas_epipolares.png" alt="Líneas epipolares dibujadas" style="width: 100%; max-width: 1400px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
       Figura 3. Líneas epipolares dibujadas.
     </figcaption>
