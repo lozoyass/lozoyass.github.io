@@ -116,7 +116,7 @@ $$
 ## 6. Proyección final
 * **Ajuste de coordenadas:** El sistema de coordenadas de una imagen plana sitúa el origen $(0,0)$ arriba a la izquierda (la Y crece hacia abajo). En un entorno 3D, el eje Y suele crecer hacia el cielo. Para evitar renderizar la escena boca abajo y en espejo, invertimos los signos al empaquetar el punto visual ($-X$, $-Y$).
 
-### Resultado
+### Resultado 
 
 Se muestra un vídeo del escenario renderizado.
 
