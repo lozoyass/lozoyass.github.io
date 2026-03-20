@@ -2,7 +2,6 @@ source "https://rubygems.org"
 
 gem "github-pages", group: :jekyll_plugins
 
-# AÑADE ESTA LÍNEA AQUÍ
 gem "jekyll-remote-theme"
 
 gem "tzinfo-data"
