@@ -58,22 +58,22 @@ Además de la geometría general, el algoritmo necesita las medidas exactas del 
 
 * **Focal ($f$):** $240.0$ píxeles
 * **Centro óptico ($c\_x, c\_y$):** $(320.0, 240.0)$, justo en el centro de nuestras imágenes de $640\times480$
-* **Línea base o Baseline ($B$):** $220.0$ mm. Es la distancia física que separa ambas cámaras, deducida al observar que cada cámara está trasladada $110$ mm desde el centro del robot en ejes opuestos.
+* **Línea base o baseline ($B$):** $220.0$ mm. Es la distancia física que separa ambas cámaras, deducida al observar que cada cámara está trasladada $110$ mm desde el centro del robot en ejes opuestos.
 
 ## 3. Preprocesamiento de las imágenes
 Antes de buscar correspondencias entre las imágenes izquierda y derecha, es crucial "limpiar" la información visual. Trabajar con las imágenes crudas capturadas por el robot (``` HAL.getImage() ```) nos expondría a variaciones de iluminación y ruido del sensor que arruinarían las comparaciones posteriores.
 
-* **Filtro bilateral:** El primer paso es aplicar un filtro bilateral (``` cv2.bilateralFilter ```). El filtro bilateral suaviza las texturas planas y elimina el ruido, preservando intactos los bordes de los objetos. Como la propia documentación de la práctica recomienda en sus Hints, esto elimina detalles innecesarios que solo estorbarían en la reconstrucción 3D.
-* **Detector de bordes de Canny:** Una imagen de 640x480 píxeles contiene más de 300.000 puntos. Procesar iterativamente cada uno de ellos hundiría el rendimiento del algoritmo. Para lograr una optimizar el proceso, utilizamos el algoritmo de Canny (` cv2.Canny `) sobre las imágenes en escala de grises. Esto reduce nuestra área de trabajo únicamente a los píxeles que forman los contornos de los objetos (donde el valor es 255). Estos bordes se convierten en nuestros puntos de interés y así reducimos drásticamente el coste computacional.
+* **Filtro bilateral:** El primer paso es aplicar un filtro bilateral (``` cv2.bilateralFilter ```). El filtro bilateral suaviza las texturas planas y elimina el ruido, preservando intactos los bordes de los objetos. Como la propia documentación de la práctica recomienda en sus hints, esto elimina detalles innecesarios que solo estorbarían en la reconstrucción 3D.
+* **Detector de bordes de Canny:** Una imagen de 640x480 píxeles contiene más de 300.000 puntos. Procesar iterativamente cada uno de ellos hundiría el rendimiento del algoritmo. Para optimizar el proceso, utilizamos el algoritmo de Canny (` cv2.Canny `) sobre las imágenes en escala de grises. Esto reduce nuestra área de trabajo únicamente a los píxeles que forman los contornos de los objetos (donde el valor es 255). Estos bordes se convierten en nuestros puntos de interés y así reducimos drásticamente el coste computacional.
 
-## 4. Correspondencia y geometría Epipolar
+## 4. Correspondencia y geometría epipolar
 Una vez extraídos los píxeles de interés en la cámara izquierda, necesitamos encontrar su píxel gemelo exacto en la cámara derecha. Aquí es donde la teoría de la geometría epipolar choca con la realidad del código y nos permite un atajo matemático.
 
 * **La ventaja canónica:** En un sistema estéreo cualquiera, para buscar el punto homólogo deberíamos proyectar un rayo 3D para hallar una línea epipolar en la segunda cámara. Sin embargo, como establece la documentación: 
 
 > "Stereo reconstruction is a special case... the epipolar line for both the image planes are same, and are parallel to the width of the planes".
 
-Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente horizontal. Por lo tanto, nos ahorramos todos los cálculos de backprojection: si nuestro píxel está en la fila $Y$ de la imagen izquierda, su gemelo estará exactamente en la misma fila $Y$ de la imagen derecha.
+Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente horizontal. Por lo tanto, nos ahorramos todos los cálculos de _backprojection_: si nuestro píxel está en la fila $Y$ de la imagen izquierda, su gemelo estará exactamente en la misma fila $Y$ de la imagen derecha.
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
@@ -84,8 +84,8 @@ Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente
   </figure>
 </div>
 
-* **Acotando la búsqueda (rango en $X$):** Ya sabemos que la búsqueda es unidimensional (solo nos movemos en el eje $X$), pero no hace falta recorrer toda la fila. Geométricamente, un objeto visto desde la cámara derecha siempre aparecerá desplazado hacia la izquierda en comparación con la cámara izquierda. Así, nuestro límite máximo de búsqueda (rango_max) es la posición X original del píxel. El límite mínimo (rango_min) lo definimos como el radio_parche de nuestra ventana de comparación, puramente para evitar salirnos de los límites de la matriz de la imagen.
-* **Template matching:** Usamos una ventana de $15\times15$ píxeles de la imagen izquierda para buscar su homólogo en la derecha mediante ``` cv2.matchTemplate ```. Solo aceptamos emparejamientos con una similitud superior al $70$%.
+* **Acotando la búsqueda (rango en $X$):** Ya sabemos que la búsqueda es unidimensional (solo nos movemos en el eje $X$), pero no hace falta recorrer toda la fila. Geométricamente, un objeto visto desde la cámara derecha siempre aparecerá desplazado hacia la izquierda en comparación con la cámara izquierda. Así, nuestro límite máximo de búsqueda (`rango_max`) es la posición X original del píxel. El límite mínimo (`rango_min`) lo definimos como el radio_parche de nuestra ventana de comparación, puramente para evitar salirnos de los límites de la matriz de la imagen.
+* **_Template matching_:** Usamos una ventana de $15\times15$ píxeles de la imagen izquierda para buscar su homólogo en la derecha mediante ``` cv2.matchTemplate ```. Solo aceptamos emparejamientos con una similitud superior al $70$%.
 
 ## 5. Triangulación matemática y filtrado de ruido
 Una vez encontrado el píxel gemelo, el siguiente paso es transformar esas coordenadas 2D en un punto tridimensional $(X, Y, Z)$ real.
@@ -102,7 +102,7 @@ Y &= \frac{(y_{izq} - c_y) \cdot Z}{f}
 \end{align*}
 $$
 
-* **Limpieza de puntos espúreos:** A pesar del umbral de similitud, el template matching puede generar falsos positivos. Estos errores producen disparidades absurdas. Para limpiar la nube de puntos, aplicamos un "clipping": descartamos cualquier punto que matemáticamente quede a más de 20 metros ($Z > 20000 \text{ mm}$) o a menos de 2 metros ($Z < 2000 \text{ mm}$). Esto elimina algo del ruido, pero no todo.
+* **Limpieza de puntos espúreos:** A pesar del umbral de similitud, el template matching puede generar falsos positivos. Estos errores producen disparidades absurdas. Para limpiar la nube de puntos, aplicamos un "_clipping_": descartamos cualquier punto que matemáticamente quede a más de 20 metros ($Z > 20000 \text{ mm}$) o a menos de 2 metros ($Z < 2000 \text{ mm}$). Esto elimina algo del ruido, pero no todo.
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
