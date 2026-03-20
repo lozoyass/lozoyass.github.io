@@ -47,7 +47,7 @@ Además de la geometría general, el algoritmo necesita las medidas exactas del 
 ![Parámetros intrínsecos del par estéreo](/assets/images/parametros_terminal.png)
 
 * **Focal ($f$):** $240.0$ píxeles
-* **Centro óptico ($c_x, c_y$):** $(320.0, 240.0)$, justo en el centro de nuestras imágenes de $640\times480$
+* **Centro óptico ($c\_x, c\_y$):** $(320.0, 240.0)$, justo en el centro de nuestras imágenes de $640\times480$
 * **Línea base o Baseline ($B$):** $220.0$ mm. Es la distancia física que separa ambas cámaras, deducida al observar que cada cámara está trasladada $110$ mm desde el centro del robot en ejes opuestos.
 
 ## 3. Preprocesamiento de las imágenes
@@ -75,13 +75,17 @@ Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente
 ## 5. Triangulación matemática y filtrado de ruido
 Una vez encontrado el píxel gemelo, el siguiente paso es transformar esas coordenadas 2D en un punto tridimensional $(X, Y, Z)$ real.
 
-* **Cálculo de la disparidad:** La disparidad ($d$) es la diferencia en píxeles entre la posición de un objeto en la cámara izquierda y en la derecha ($d = x_{izq} - x_{der}$). Cuanto más cerca está el objeto, mayor es este salto visual. Si un punto está en el infinito, su disparidad es cero.
+* **Cálculo de la disparidad:** La disparidad ($d$) es la diferencia en píxeles entre la posición de un objeto en la cámara izquierda y en la derecha ($d = x\_{izq} - x\_{der}$). Cuanto más cerca está el objeto, mayor es este salto visual. Si un punto está en el infinito, su disparidad es cero.
 
 * **Triángulos semejantes:** Gracias a la geometría del estéreo canónico, podemos usar la relación de triángulos semejantes para calcular la profundidad exacta ($Z$) y las coordenadas espaciales ($X$, $Y$) aplicando el modelo pinhole:
 
-$$Z = \frac{f \cdot B}{d}$$
-$$X = \frac{(x_{izq} - c_x) \cdot Z}{f}$$
-$$Y = \frac{(y_{izq} - c_y) \cdot Z}{f}$$
+$$
+\begin{align*}
+Z &= \frac{f \cdot B}{d} \\
+X &= \frac{(x_{izq} - c_x) \cdot Z}{f} \\
+Y &= \frac{(y_{izq} - c_y) \cdot Z}{f}
+\end{align*}
+$$
 
 * **Limpieza de puntos espúreos:** A pesar del umbral de similitud, el template matching puede generar falsos positivos. Estos errores producen disparidades absurdas. Para limpiar la nube de puntos, aplicamos un "clipping": descartamos cualquier punto que matemáticamente quede a más de 20 metros ($Z > 20000 \text{ mm}$) o a menos de 2 metros ($Z < 2000 \text{ mm}$). Esto elimina algo del ruido, pero no todo.
 
