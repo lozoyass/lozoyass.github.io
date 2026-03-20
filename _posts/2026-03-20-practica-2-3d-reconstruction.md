@@ -1,9 +1,28 @@
 ---
-layout: post
-title: "Reconstrucción 3D mediante Visión Estéreo con el robot Kobuki"
+layout: single
+title: "Práctica 2: Reconstrucción 3D"
+mathjax: true
+classes: wide
 date: 2026-03-20
-categories: [Robótica, Visión por Computador]
+categories: vision-robotica
+author_profile: true
+sidebar:
+  nav: ""
 ---
+
+<style>
+  .page__content {
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    float: none !important;
+  }
+  .page__inner-wrap {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+  }
+</style>
 
 ## 1. Introducción
 En esta práctica, el objetivo principal es dotar a nuestro robot de percepción de profundidad. A partir de dos imágenes bidimensionales obtenidas simultáneamente por sus cámaras estéreo (izquierda y derecha), programaremos la lógica matemática necesaria para generar una nube de puntos y reconstruir en 3D la escena que el robot tiene en frente.
