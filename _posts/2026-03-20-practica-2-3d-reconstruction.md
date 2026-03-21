@@ -24,6 +24,15 @@ sidebar:
   }
 </style>
 
+<div style="text-align: center; margin: 2em 0;">
+  <figure style="display: inline-block; margin: 0; padding: 0;">
+    <img src="/assets/images/escenario.png" alt="Escenario de la reconstrucción" style="width: 100%; max-width: 1400px; height: auto;">
+    <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
+      Escenario del simulador que vamos a reconstruir.
+    </figcaption>
+  </figure>
+</div>
+
 ## 1. Introducción
 En esta práctica, el objetivo principal es dotar a nuestro robot de percepción de profundidad. A partir de dos imágenes bidimensionales obtenidas simultáneamente por sus cámaras estéreo (izquierda y derecha), programaremos la lógica matemática necesaria para generar una nube de puntos y reconstruir en 3D la escena que el robot tiene en frente.
 
