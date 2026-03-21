@@ -29,29 +29,18 @@ En esta práctica, el objetivo principal es dotar a nuestro robot de percepción
 
 Para llevar a cabo este desarrollo, volvemos a utilizar el entorno de simulación y programación de Unibotics. Todo el algoritmo de visión artificial se ha implementado íntegramente en Python, apoyándonos en las matrices de las cámaras y en las herramientas de procesamiento de imagen de OpenCV.
 
-## 2. Fundamentos del estéreo canónico
-Para poder reconstruir el mundo en 3D, primero necesitamos entender cómo están configurados los "ojos" de nuestro robot. En nuestro caso, trabajamos con un par estéreo canónico. Esto significa que las dos cámaras están perfectamente coplanarias (en el mismo plano) y sus ejes ópticos son estrictamente paralelos. ¿Cómo sabemos que esto es así y no hay distorsiones físicas? Porque nos apoyamos en la propia documentación teórica de la práctica, que establece esta configuración por diseño: 
+## 2. Fundamentos de la geometría estéreo
+Para poder reconstruir el mundo en 3D, primero necesitamos entender cómo están configurados las cámaras de nuestro robot. En la visión estéreo, es fundamental conocer la posición espacial y las características de cada cámara para poder trazar y cruzar los rayos de luz.
 
-> "Stereo reconstruction is a special case of the above 3d reconstruction where the two image planes are parallel to each other and equally distant from the 3d point we want to plot. In this case the epipolar line for both the image planes are same, and are parallel to the width of the planes, simplifying our constraints better."
+Aunque la propia documentación de la práctica nos indica que el diseño de las cámaras es coplanario, el objetivo es desarrollar un algoritmo computacional robusto que funcione mediante matrices de proyección, calculando la geometría epipolar real de la escena.
 
-Trabajar en un simulador perfecto nos permite asumir esta geometría ideal, lo que simplificará enormemente los cálculos epipolares más adelante.
-
-<div style="text-align: center; margin: 2em 0;">
-  <figure style="display: inline-block; margin: 0; padding: 0;">
-    <img src="/assets/images/estereo_canonico_cropped.jpg" alt="Configuración estéreo canónica" style="width: 60%; max-width: 600px; height: auto;">
-    <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
-      Figura 1. Representación del par estéreo canónico.
-    </figcaption>
-  </figure>
-</div>
-
-Además de la geometría general, el algoritmo necesita las medidas exactas del modelo de la cámara. Realizamos una pequeña depuración imprimiendo por terminal los datos del driver de ROS (``` HAL.getCameraPosition() ```). A partir de las matrices intrínseca ($K$) y extrínseca ($RT$) devueltas por la terminal, extrajimos nuestras constantes fundamentales:
+Realizamos una pequeña depuración imprimiendo por terminal los datos del driver de ROS (`HAL.getCameraPosition()`). A partir de las matrices intrínseca ($K$) y extrínseca ($RT$) devueltas por la terminal, extrajimos nuestras constantes fundamentales:
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
     <img src="/assets/images/parametros_terminal.png" alt="Parámetros mostrados por la terminal" style="width: 100%; max-width: 1400px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
-      Figura 2. Constantes fundamentales mostradas por terminal.
+      Figura 1. Constantes fundamentales mostradas por terminal.
     </figcaption>
   </figure>
 </div>
@@ -60,6 +49,8 @@ Además de la geometría general, el algoritmo necesita las medidas exactas del 
 * **Centro óptico ($c\_x, c\_y$):** $(320.0, 240.0)$, justo en el centro de nuestras imágenes de $640\times480$
 * **Línea base o baseline ($B$):** $220.0$ mm. Es la distancia física que separa ambas cámaras, deducida al observar que cada cámara está trasladada $110$ mm desde el centro del robot en ejes opuestos.
 
+Con estos parámetros construimos nuestras matrices de proyección ($P_1$ y $P_2$), estableciendo la cámara izquierda como el origen de coordenadas del mundo y la cámara derecha trasladada espacialmente en el eje X en función del baseline.
+
 ## 3. Preprocesamiento de las imágenes
 Antes de buscar correspondencias entre las imágenes izquierda y derecha, es crucial "limpiar" la información visual. Trabajar con las imágenes crudas capturadas por el robot (``` HAL.getImage() ```) nos expondría a variaciones de iluminación y ruido del sensor que arruinarían las comparaciones posteriores.
 
@@ -67,38 +58,35 @@ Antes de buscar correspondencias entre las imágenes izquierda y derecha, es cru
 * **Detector de bordes de Canny:** Una imagen de 640x480 píxeles contiene más de 300.000 puntos. Procesar iterativamente cada uno de ellos hundiría el rendimiento del algoritmo. Para optimizar el proceso, utilizamos el algoritmo de Canny (` cv2.Canny `) sobre las imágenes en escala de grises. Esto reduce nuestra área de trabajo únicamente a los píxeles que forman los contornos de los objetos (donde el valor es 255). Estos bordes se convierten en nuestros puntos de interés y así reducimos drásticamente el coste computacional.
 
 ## 4. Correspondencia y geometría epipolar
-Una vez extraídos los píxeles de interés en la cámara izquierda, necesitamos encontrar su píxel gemelo exacto en la cámara derecha. Aquí es donde la teoría de la geometría epipolar choca con la realidad del código y nos permite un atajo matemático.
+Una vez extraídos los píxeles de interés en la cámara izquierda, necesitamos encontrar su píxel gemelo exacto en la cámara derecha. Para ello aplicamos la teoría de la geometría epipolar.
 
-* **La ventaja canónica:** En un sistema estéreo cualquiera, para buscar el punto homólogo deberíamos proyectar un rayo 3D para hallar una línea epipolar en la segunda cámara. Sin embargo, como establece la documentación: 
+* **Proyección y retroproyección:** Para buscar el punto homólogo de un píxel de la imagen izquierda, trazamos matemáticamente su línea epipolar correspondiente en la cámara derecha. Tomamos el píxel de interés y lanzamos un rayo tridimensional imaginario acotado entre una distancia mínima ($Z=2\text{ m}$) y una máxima ($Z=20\text{ m}$). Proyectando los extremos de este rayo 3D sobre el plano de la segunda cámara, obtenemos las coordenadas de un segmento exacto en 2D.
 
-> "Stereo reconstruction is a special case... the epipolar line for both the image planes are same, and are parallel to the width of the planes".
-
-Al tener un par estéreo canónico perfecto, la línea epipolar es perfectamente horizontal. Por lo tanto, nos ahorramos todos los cálculos de _backprojection_: si nuestro píxel está en la fila $Y$ de la imagen izquierda, su gemelo estará exactamente en la misma fila $Y$ de la imagen derecha.
+* **Búsqueda a lo largo de la línea:** Una vez calculado el segmento epipolar limitamos nuestra búsqueda a los puntos que forman dicha línea. Evaluamos iterativamente las coordenadas, pero solo nos detenemos a procesar aquellos píxeles que pertenezcan a los bordes detectados por el algoritmo de Canny en la imagen derecha. Con esto evitamos procesar áreas vacías.
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
     <img src="/assets/images/lineas_epipolares.png" alt="Líneas epipolares dibujadas" style="width: 100%; max-width: 1400px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
-      Figura 3. Líneas epipolares dibujadas.
+      Figura 2. Líneas epipolares de búsqueda.
     </figcaption>
   </figure>
 </div>
 
-* **Acotando la búsqueda (rango en $X$):** Ya sabemos que la búsqueda es unidimensional (solo nos movemos en el eje $X$), pero no hace falta recorrer toda la fila. Geométricamente, un objeto visto desde la cámara derecha siempre aparecerá desplazado hacia la izquierda en comparación con la cámara izquierda. Así, nuestro límite máximo de búsqueda (`rango_max`) es la posición X original del píxel. El límite mínimo (`rango_min`) lo definimos como el radio_parche de nuestra ventana de comparación, puramente para evitar salirnos de los límites de la matriz de la imagen.
 * **_Template matching_:** Usamos una ventana de $15\times15$ píxeles de la imagen izquierda para buscar su homólogo en la derecha mediante ``` cv2.matchTemplate ```. Solo aceptamos emparejamientos con una similitud superior al $70$%.
 
 ## 5. Triangulación matemática y filtrado de ruido
 Una vez encontrado el píxel gemelo, el siguiente paso es transformar esas coordenadas 2D en un punto tridimensional $(X, Y, Z)$ real.
 
-* **Cálculo de la disparidad:** La disparidad ($d$) es la diferencia en píxeles entre la posición de un objeto en la cámara izquierda y en la derecha ($d = x\_{izq} - x\_{der}$). Cuanto más cerca está el objeto, mayor es este salto visual. Si un punto está en el infinito, su disparidad es cero.
+* **Triangulación espacial:** Cruzamos los rayos visuales de ambas cámaras en el espacio 3D. Utilizando las matrices de proyección ($P_1$ y $P_2$) definidas en la configuración, empleamos la función algorítmica `cv2.triangulatePoints`. Este método matemático busca el punto de intersección óptimo minimizando el error, devolviendo una coordenada homogénea en 4D ($P_{4D}$).
 
-* **Triángulos semejantes:** Gracias a la geometría del estéreo canónico, podemos usar la relación de triángulos semejantes para calcular la profundidad exacta ($Z$) y las coordenadas espaciales ($X$, $Y$) aplicando el modelo pinhole:
+* **Conversión a cartesianas:** Para recuperar nuestras métricas reales en milímetros, dividimos los tres primeros componentes del vector 4D por su cuarta coordenada (la escala):
 
 $$
 \begin{align*}
-Z &= \frac{f \cdot B}{d} \\
-X &= \frac{(x_{izq} - c_x) \cdot Z}{f} \\
-Y &= \frac{(y_{izq} - c_y) \cdot Z}{f}
+X &= \frac{P_{4D}[0]}{P_{4D}[3]} \\
+Y &= \frac{P_{4D}[1]}{P_{4D}[3]} \\
+Z &= \frac{P_{4D}[2]}{P_{4D}[3]}
 \end{align*}
 $$
 
@@ -108,7 +96,7 @@ $$
   <figure style="display: inline-block; margin: 0; padding: 0;">
     <img src="/assets/images/espureos_pintados.png" alt="Puntos espúreos (malos emparejamientos)" style="width: 100%; max-width: 1400px; height: auto;">
     <figcaption style="text-align: center; margin-top: 0.5em; font-style: italic; color: #666;">
-      Figura 4. Puntos espúreos (emparejamientos erróneos).
+      Figura 3. Puntos espúreos (emparejamientos erróneos).
     </figcaption>
   </figure>
 </div>
