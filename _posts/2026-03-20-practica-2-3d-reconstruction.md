@@ -30,7 +30,7 @@ En esta práctica, el objetivo principal es dotar a nuestro robot de percepción
 Para llevar a cabo este desarrollo, volvemos a utilizar el entorno de simulación y programación de Unibotics. Todo el algoritmo de visión artificial se ha implementado íntegramente en Python, apoyándonos en las matrices de las cámaras y en las herramientas de procesamiento de imagen de OpenCV.
 
 ## 2. Fundamentos de la geometría estéreo
-Para poder reconstruir el mundo en 3D, primero necesitamos entender cómo están configurados las cámaras de nuestro robot. En la visión estéreo, es fundamental conocer la posición espacial y las características de cada cámara para poder trazar y cruzar los rayos de luz.
+Para poder reconstruir el mundo en 3D, primero necesitamos entender cómo están configuradas las cámaras de nuestro robot. En la visión estéreo, es fundamental conocer la posición espacial y las características de cada cámara para poder trazar y cruzar los rayos de luz.
 
 Aunque la propia documentación de la práctica nos indica que el diseño de las cámaras es coplanario, el objetivo es desarrollar un algoritmo computacional robusto que funcione mediante matrices de proyección, calculando la geometría epipolar real de la escena.
 
@@ -47,9 +47,9 @@ Realizamos una pequeña depuración imprimiendo por terminal los datos del drive
 
 * **Focal ($f$):** $240.0$ píxeles
 * **Centro óptico ($c\_x, c\_y$):** $(320.0, 240.0)$, justo en el centro de nuestras imágenes de $640\times480$
-* **Línea base o baseline ($B$):** $220.0$ mm. Es la distancia física que separa ambas cámaras, deducida al observar que cada cámara está trasladada $110$ mm desde el centro del robot en ejes opuestos.
+* **Línea base o _baseline_ ($B$):** $220.0$ mm. Es la distancia física que separa ambas cámaras, deducida al observar que cada cámara está trasladada $110$ mm desde el centro del robot en ejes opuestos.
 
-Con estos parámetros construimos nuestras matrices de proyección ($P_1$ y $P_2$), estableciendo la cámara izquierda como el origen de coordenadas del mundo y la cámara derecha trasladada espacialmente en el eje X en función del baseline.
+Con estos parámetros construimos nuestras matrices de proyección ($P_1$ y $P_2$), estableciendo la cámara izquierda como el origen de coordenadas del mundo y la cámara derecha trasladada espacialmente en el eje X en función del _baseline_.
 
 ## 3. Preprocesamiento de las imágenes
 Antes de buscar correspondencias entre las imágenes izquierda y derecha, es crucial "limpiar" la información visual. Trabajar con las imágenes crudas capturadas por el robot (``` HAL.getImage() ```) nos expondría a variaciones de iluminación y ruido del sensor que arruinarían las comparaciones posteriores.
@@ -90,7 +90,7 @@ Z &= \frac{P_{4D}[2]}{P_{4D}[3]}
 \end{align*}
 $$
 
-* **Limpieza de puntos espúreos:** A pesar del umbral de similitud, el template matching puede generar falsos positivos. Estos errores producen disparidades absurdas. Para limpiar la nube de puntos, aplicamos un "_clipping_": descartamos cualquier punto que matemáticamente quede a más de 20 metros ($Z > 20000 \text{ mm}$) o a menos de 2 metros ($Z < 2000 \text{ mm}$). Esto elimina algo del ruido, pero no todo.
+* **Limpieza de puntos espúreos:** A pesar del umbral de similitud, el _template matching_ puede generar falsos positivos. Estos errores producen disparidades absurdas. Para limpiar la nube de puntos, aplicamos un "_clipping_": descartamos cualquier punto que matemáticamente quede a más de 20 metros ($Z > 20000 \text{ mm}$) o a menos de 2 metros ($Z < 2000 \text{ mm}$). Esto elimina algo del ruido, pero no todo.
 
 <div style="text-align: center; margin: 2em 0;">
   <figure style="display: inline-block; margin: 0; padding: 0;">
