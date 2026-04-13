@@ -157,7 +157,7 @@ Para garantizar que el robot recorra el entorno y visite diversas estancias, imp
 ### Demostración en vídeo
 En los siguientes vídeos se puede observar el comportamiento final del robot. Debido a la carga computacional que supone el procesamiento de imagen y la simulación física, la grabación original de la sesión deambulando por la casa ha sido acelerada.
 
-Es importante mencionar que aunque en el vídeo de demostración todas las balizas visibles se pintan, en el código final solamente trabajamos con la más cercana (como nos pide el enunciado).
+Es importante mencionar que aunque en el vídeo de demostración se pinta la bounding box de todas las balizas visibles, en el código final solamente trabajamos con la más cercana (como nos pide el enunciado).
 
 Se muestran dos vídeos, cada uno con una ruta distinta:
 
